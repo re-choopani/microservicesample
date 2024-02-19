@@ -1,0 +1,76 @@
+version: '3.4'
+
+services:
+  catalogdb:
+    image: mongo
+    
+  basketdb:
+    image: redis:alpine
+  portainer:
+    image: "portainer/portainer-ce"
+
+  discountdb:
+    image: "postgres"
+
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+
+  pgadmin:
+    image: dpage/pgadmin4
+
+  orderdb:
+    image: mcr.microsoft.com/mssql/server
+
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+
+    build:
+      context: .
+      dockerfile: Services/Catalog/Catalog.Api/Dockerfile
+
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: Services/Basket/Basket.Api/Dockerfile
+
+  discount.api:
+    image: ${DOCKER_REGISTRY-}discountapi
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.api/Dockerfile
+
+  discountgrpc:
+    image: ${DOCKER_REGISTRY-}discountgrpc
+    build:
+      context: .
+      dockerfile: Services/Discount/DiscountGrpc/Dockerfile
+
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.Api/Dockerfile
+
+  ocelotapigateways:
+    image: ${DOCKER_REGISTRY-}ocelotapigateways
+    build:
+      context: .
+      dockerfile: ApiGateways/OcelotApiGateways/Dockerfile
+
+  shopping.aggregator:
+    image: ${DOCKER_REGISTRY-}shoppingaggregator
+    build:
+      context: .
+      dockerfile: ApiGateways/Shopping.Aggregator/Dockerfile
+
+volumes:
+  mongo_data:
+  portainer_data:
+  postgres_data:
+  pgadmin_data:
+
+
+
+
+
